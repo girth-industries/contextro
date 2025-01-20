@@ -10,6 +10,7 @@ class Contextro:
         self.root_dir = Path(root_dir).resolve()
         self.ignore_file = self.root_dir / ignore_file
         self.ignore_patterns = self._load_ignore_patterns()
+        self.ignore_patterns.append('context_*.txt')
 
     def _load_ignore_patterns(self):
         """Load and parse the .contextignore file, similar to .gitignore"""
