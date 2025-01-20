@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
-class ContextBuilder:
+class Contextro:
     def __init__(self, root_dir='.', ignore_file='.contextignore'):
         self.root_dir = Path(root_dir).resolve()
         self.ignore_file = self.root_dir / ignore_file
@@ -118,7 +118,7 @@ def main():
     args = parser.parse_args()
     
     try:
-        builder = ContextBuilder(args.directory, args.ignore_file)
+        builder = Contextro(args.directory, args.ignore_file)
         builder.build_context()
     except Exception as e:
         print(f"Error: {e}")
