@@ -31,18 +31,32 @@ class ContextBuilder:
         # Convert path to relative path from root_dir
         rel_path = str(Path(path).resolve().relative_to(self.root_dir))
         
+        # Also create path with trailing slash for directory matching
+        rel_path_with_slash = rel_path + '/' if os.path.isdir(path) else rel_path
+        
         for pattern in self.ignore_patterns:
+            # Handle pattern variations
+            pattern_variations = [
+                pattern,                    # Original pattern
+                f"**/{pattern}",           # Match in any subdirectory
+                f"**/{pattern}/**"         # Match all contents in any subdirectory
+            ]
+            
             # Handle negation patterns
             if pattern.startswith('!'):
-                if fnmatch.fnmatch(rel_path, pattern[1:]):
-                    return False
-            # Handle directory-specific patterns
-            elif pattern.endswith('/'):
-                if fnmatch.fnmatch(f"{rel_path}/", pattern):
-                    return True
-            # Handle regular patterns
-            elif fnmatch.fnmatch(rel_path, pattern):
-                return True
+                clean_pattern = pattern[1:]
+                for var in pattern_variations:
+                    if fnmatch.fnmatch(rel_path, clean_pattern):
+                        return False
+            else:
+                for var in pattern_variations:
+                    # Handle directory-specific patterns
+                    if pattern.endswith('/'):
+                        if fnmatch.fnmatch(rel_path_with_slash, var):
+                            return True
+                    # Handle regular patterns
+                    elif fnmatch.fnmatch(rel_path, var):
+                        return True
         return False
 
     def _is_binary(self, path):
