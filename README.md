@@ -11,3 +11,6 @@ You can use `.`
 Examples:
 `python3 ~/proj/contextro/contextro.py .`
 `python3 ~/proj/contextro/contextro.py ~/proj/exampleproject`
+
+## .contextignore usage
+works like gitignore, check the example in the repo
