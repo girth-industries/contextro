@@ -4,7 +4,10 @@ Dumps all files not included in context.ignore into one text file. Useful for gi
 
 ## Usage
 
-Navigate to the directory you want to create the context file. `/path/to/contextro/contextro.py /path/of/the/project`
+Navigate to the directory you want to create the context file. `python3 /path/to/contextro/contextro.py /path/to/root/of/project`
 
 You can use `.`
 
+Examples:
+`python3 ~/proj/contextro/contextro.py .`
+`python3 ~/proj/contextro/contextro.py ~/proj/exampleproject`
