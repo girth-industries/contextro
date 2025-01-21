@@ -2,6 +2,7 @@ import os
 import fnmatch
 import time
 import argparse
+import glob
 from pathlib import Path
 from datetime import datetime
 
@@ -69,11 +70,23 @@ class Contextro:
         except Exception:
             return True
 
+    def _cleanup_old_context_files(self):
+        """Delete any existing context_{timestamp}.txt files"""
+        pattern = self.root_dir / 'context_*.txt'
+        for file in glob.glob(str(pattern)):
+            try:
+                os.remove(file)
+                print(f"Deleted old context file: {file}")
+            except Exception as e:
+                print(f"Error deleting {file}: {e}")
+
     def build_context(self):
         """
         Build the context file by concatenating all non-ignored files,
         separated by the specified delimiter.
         """
+        
+        self._cleanup_old_context_files()
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         output_file = self.root_dir / f'context_{timestamp}.txt'
         
