@@ -2,16 +2,16 @@ import os
 import fnmatch
 import time
 import argparse
-import glob
 from pathlib import Path
 from datetime import datetime
+import glob
 
 class Contextro:
     def __init__(self, root_dir='.', ignore_file='.contextignore'):
         self.root_dir = Path(root_dir).resolve()
         self.ignore_file = self.root_dir / ignore_file
         self.ignore_patterns = self._load_ignore_patterns()
-        self.ignore_patterns.append('context_*.txt')
+        self.ignore_patterns.append('contextro_context_*.txt')
 
     def _load_ignore_patterns(self):
         """Load and parse the .contextignore file, similar to .gitignore"""
@@ -72,7 +72,7 @@ class Contextro:
 
     def _cleanup_old_context_files(self):
         """Delete any existing context_{timestamp}.txt files"""
-        pattern = self.root_dir / 'context_*.txt'
+        pattern = self.root_dir / 'contextro_context_*.txt'
         for file in glob.glob(str(pattern)):
             try:
                 os.remove(file)
@@ -85,10 +85,11 @@ class Contextro:
         Build the context file by concatenating all non-ignored files,
         separated by the specified delimiter.
         """
-        
+        # Clean up old context files first
         self._cleanup_old_context_files()
+        
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        output_file = self.root_dir / f'context_{timestamp}.txt'
+        output_file = self.root_dir / f'contextro_context_{timestamp}.txt'
         
         with open(output_file, 'w', encoding='utf-8') as out:
             for root, dirs, files in os.walk(self.root_dir):
